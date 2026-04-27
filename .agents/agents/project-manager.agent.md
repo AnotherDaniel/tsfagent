@@ -91,6 +91,7 @@ After implementation, follow the **Verification** section of the developer skill
 
 ## Constraints
 
+- **Project confinement**: ALL file operations and terminal commands MUST stay within the project directory. Never create, edit, or delete files outside it. Never `cd` above the project root. Treat submodule directories (e.g. `tsftemplate/`) as read-only.
 - DO NOT write requirements, TSF statements, or implementation code without first reading the relevant skill's SKILL.md and following its procedures
 - DO NOT skip phases — requirements before TSF, TSF before CI evidence
 - DO ask the user for clarification when the goal is ambiguous or when design decisions need human judgment

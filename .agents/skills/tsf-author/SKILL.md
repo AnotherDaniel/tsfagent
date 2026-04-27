@@ -46,11 +46,60 @@ TSF organizes quality claims in a directed acyclic graph (DAG):
 ```
 TRUSTABLE-SOFTWARE (root)
   └─ TT-EXPECTATIONS (TSF Tenet — abstract quality pillar)
-       └─ ECLIPSE-PROJECT_README (Upstream — process/standard demand)
-            └─ TSFTEMPLATE-PROJECT_README (Project — concrete, provable claim)
+       └─ TA-BEHAVIOURS (Trustable Assertion — mid-level claim)
+            └─ ECLIPSE-PROJECT_SCOPE (Upstream — process/standard demand)
+                 └─ MYPROJECT-FEATURE_SPEC (Project — concrete, provable claim)
 ```
 
 Each layer increases specificity. **Project-level statements** are the leaf nodes where evidence is attached.
+
+### TSF Tenet Branches
+
+The root `TRUSTABLE-SOFTWARE` node has six tenet branches (TT-*). These divide into two categories that require very different treatment:
+
+#### Feature-aligned tenets (evolve with project functionality)
+
+These tenets are closely tied to what the software *does*. Project statements under them grow as features are added and must be updated when behaviour changes.
+
+| Tenet | Statement | Child Assertions | What It Covers |
+|-------|-----------|-----------------|----------------|
+| **TT-EXPECTATIONS** | "Documentation specifying what XYZ is expected to do, and what it must not do, and how this is verified." | TA-BEHAVIOURS, TA-CONSTRAINTS, TA-INDICATORS, TA-MISBEHAVIOURS | Specified behaviours, constraints on deployment, misbehaviour identification (STPA analysis fits here), monitoring indicators |
+| **TT-RESULTS** | "Evidence that XYZ does what it is supposed to do, and does not do what it must not do." | TA-ANALYSIS, TA-DATA, TA-VALIDATION | Test data collection, analysis of results, validation through systematic testing |
+| **TT-CHANGES** | "XYZ is actively maintained, with regular updates and regression prevention." | TA-FIXES, TA-UPDATES | Bug triage and fixes, dependency and configuration updates under change control |
+
+**Guidance**: When adding a new feature or requirement, consider whether it needs project statements under TT-EXPECTATIONS (specifying the behaviour) and TT-RESULTS (proving the behaviour). STPA-derived constraints from the stpa-analyst skill typically map to TA-MISBEHAVIOURS (under TT-EXPECTATIONS) and TA-VALIDATION (under TT-RESULTS).
+
+#### Process-aligned tenets (set up once, stable across features)
+
+These tenets describe *how* the software is built, managed, and assured. Project statements under them are typically set up during project bootstrap and change only when the development process, tooling, or supply chain changes — not when features are added.
+
+| Tenet | Statement | Child Assertions | What It Covers |
+|-------|-----------|-----------------|----------------|
+| **TT-CONFIDENCE** | "Confidence is achieved by measuring and analysing behaviour and evidence over time." | TA-CONFIDENCE, TA-METHODOLOGIES | SME confidence scoring, development processes (code review, commit records, security policy, contribution process) |
+| **TT-CONSTRUCTION** | "Tools are provided to build XYZ from trusted sources with full reproducibility." | TA-ITERATIONS, TA-RELEASES, TA-TESTS | Build reproducibility, release artifacts, test environments, version control |
+| **TT-PROVENANCE** | "All inputs and attestations are provided with known provenance." | TA-INPUTS, TA-SUPPLY_CHAIN | IP compliance, SBOM generation, dependency mirroring, supply chain controls |
+
+**Guidance**: These branches align primarily with the project's CI/CD setup, build tooling, and organisational processes. The Eclipse upstream statements (ECLIPSE-*) typically sit beneath the TA-assertions in these branches — covering code review, commit records, security policy, build instructions, formal releases, etc. Project statements here prove that the project follows these processes.
+
+### Choosing the Right Parent Node
+
+When creating a new project statement, link it to the most specific existing node that it supports:
+
+| Your statement is about... | Link to parent |
+|---------------------------|---------------|
+| A specified feature behaviour or capability | TA-BEHAVIOURS → via an ECLIPSE-* node if one exists, or directly |
+| A constraint on how the software may be used/deployed | TA-CONSTRAINTS |
+| Monitoring or early warning of misbehaviour | TA-INDICATORS |
+| Identifying and mitigating prohibited behaviours (STPA) | TA-MISBEHAVIOURS |
+| Test results, coverage reports | TA-DATA or TA-VALIDATION |
+| Analysis of test or monitoring data | TA-ANALYSIS |
+| Bug fixes or vulnerability patches | TA-FIXES |
+| Dependency or configuration updates | TA-UPDATES |
+| Build process or reproducibility | TA-RELEASES or TA-ITERATIONS |
+| Development methodology or process compliance | TA-METHODOLOGIES |
+| IP, licensing, SBOM | TA-INPUTS |
+| Supply chain or source mirroring | TA-SUPPLY_CHAIN |
+| SME confidence assessment | TA-CONFIDENCE |
 
 ### Statement Types
 
@@ -231,7 +280,7 @@ When creating a TSF statement, simultaneously plan how it will be proven. This i
 
 ### Evidence Types
 
-TSF supports these evidence reference types (via `tsffer`):
+TSF supports these evidence reference types (via Python renderers provided in `.dotstop_extensions/` in submodule `tsftemplate`):
 
 | Type | Use Case | Example |
 |------|----------|---------|
@@ -239,6 +288,8 @@ TSF supports these evidence reference types (via `tsffer`):
 | `download_url` | Release artifact accessible via URL | Uploaded README, test report, SBOM |
 | `webpage` | External reference or policy page | Eclipse Foundation Security Policy, standards docs |
 | `openfasttrace` | OFT requirement tracing result | `req~security-policy` tracing status |
+
+It is possible/desirable to extend this list of evidence renderers according to project needs.
 
 ### Choosing Evidence for a Statement
 

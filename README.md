@@ -52,7 +52,7 @@ User Goal
     │
     ▼
 ┌──────────────────┐
-│  project-manager  │  Orchestrates the pipeline
+│  project-manager │  Orchestrates the pipeline
 └────────┬─────────┘
          │
          ├──────────────────────────┐
@@ -61,18 +61,18 @@ User Goal
          │                   │  stpa-      │  Hazard analysis
          │                   │  analyst    │  (optional)
          │                   └──────┬──────┘
-         │                         │ constraints
-    ┌────┴────┐              │
-    ▼         ▼              ▼
+         │                          │ constraints
+    ┌────┴────┐                     │
+    ▼         ▼                     ▼
 ┌────────┐ ┌──────────┐
-│  spec- │ │   tsf-   │  Requirements + quality goals
-│ writer │ │  author   │  (informed by STPA if used)
+│  spec- │ │   tsf-   │    Requirements + quality goals
+│ writer │ │  author  │     (informed by STPA if used)
 └───┬────┘ └────┬─────┘
     │           │
     └─────┬─────┘
           ▼
     ┌───────────┐
-    │ developer  │  Implements, tests, wires evidence
+    │ developer │  Implements, tests, wires evidence
     └───────────┘
           │
           ▼
@@ -175,6 +175,9 @@ The prompt drives the project-manager agent through all scaffolding steps automa
 
    # Upstream TSF statements (reference hierarchy)
    cp -r tsftemplate/trustable/upstream trustable/upstream
+
+   # tsftemplate trudag evidence renderers
+   cp -r tsftemplate/.dotstop_extensions .dotstop_extensions
    ```
 
 4. **Add tsfagent as a submodule** (for the agent skills)

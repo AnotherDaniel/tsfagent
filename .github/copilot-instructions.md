@@ -61,6 +61,25 @@ This project uses three specialized skills orchestrated by the **project-manager
 
 The pipeline flows: (STPA analysis →) specification → TSF statements → implementation → CI evidence → trust report.
 
+## TSF Tenet Branch Categories
+
+The six TT-tenets divide into two categories:
+
+- **Feature-aligned** (evolve with project functionality): TT-EXPECTATIONS (specified behaviours, constraints, misbehaviours), TT-RESULTS (test evidence, analysis, validation), TT-CHANGES (fixes, updates)
+- **Process-aligned** (set up once for project infrastructure): TT-CONFIDENCE (methodologies, SME scoring), TT-CONSTRUCTION (builds, releases, tests), TT-PROVENANCE (inputs, supply chain, SBOM)
+
+See the tsf-author skill for detailed guidance on choosing parent nodes.
+
+## Project Confinement
+
+All agent and skill operations MUST be confined to the project directory (the workspace root where `.dotstop.dot` and `.env.oft` reside):
+
+- **File operations**: NEVER create, edit, or delete files outside the project directory
+- **Terminal commands**: ALWAYS run commands with the project directory as working directory; never `cd` above it
+- **No global side-effects**: Do not install global packages, modify system configuration, or write to home-directory dotfiles
+- **Submodules are read-only**: Treat `tsftemplate/` (and any other submodule) as read-only reference material — never modify files inside submodule directories
+- **Relative paths**: Prefer relative paths rooted at the project directory for all file references in configuration, CI workflows, and documentation
+
 ## Quality Rules
 
 - Every `req~` with `Needs: impl` must have a corresponding `[impl->...]` marker

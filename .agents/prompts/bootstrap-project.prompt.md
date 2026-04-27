@@ -45,7 +45,10 @@ The user will provide a **project name** and optionally a brief description of t
 
    # Upstream TSF statements
    cp -r tsftemplate/trustable/upstream trustable/upstream
-   ```
+
+   # tsftemplate trudag evidence renderers
+   cp -r tsftemplate/.dotstop_extensions .dotstop_extensions
+  ```
 
 4. **Add tsfagent as a submodule**:
 
@@ -92,3 +95,7 @@ The user will provide a **project name** and optionally a brief description of t
     ```
 
 11. **Report** what was created and confirm the project is ready for the user to describe their first goal.
+
+## Confinement
+
+All operations in this prompt MUST stay within the project directory created in Step 1. After `cd <project-name>`, never navigate above it. Do not install global packages, modify system files, or write outside the project root. Treat the `tsftemplate/` submodule as read-only after cloning.

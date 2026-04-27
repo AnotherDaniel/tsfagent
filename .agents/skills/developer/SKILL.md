@@ -359,6 +359,8 @@ Before finalizing an implementation, verify:
 - [ ] For each requirement linked to a TSF statement, a `tsffer` CI step records evidence
 - [ ] `tsffer` steps use `openfasttrace` reference type with bare requirement ID (no version suffix)
 - [ ] Implementation follows existing project conventions for code style and structure
+- [ ] Each commit is small, focused, and references the relevant `req~` or TSF statement ID
+- [ ] No generated files, build outputs, secrets, or submodule changes committed
 
 ## Verification
 
@@ -410,3 +412,50 @@ Review `.github/workflows/release.yaml` and verify:
 2. Every `openfasttrace` reference uses the bare requirement ID (no `~version` suffix)
 3. The `tsflink` step runs after all `tsffer` steps
 4. The OFT trace step's `file-patterns` match `.env.oft` `OFT_FILE_PATTERNS`
+
+## Git Commit Practices
+
+Commits are part of the traceability chain — they connect code changes to the requirements that motivated them.
+
+**Commit scope**: Make small, focused commits. Each commit should address a single requirement or a single logical change. Do not bundle unrelated changes.
+
+- One commit per `req~` implementation (code + OFT marker)
+- One commit per test addition (test code + OFT marker)
+- One commit per CI evidence wiring (`tsffer` step addition)
+- Separate commits for configuration changes (`.env.oft`, `.dotstop.dot`)
+
+**Commit message format**:
+
+```
+<short summary of what changed> (req~<name>~<version>)
+
+<optional body explaining why, referencing the requirement or TSF statement>
+```
+
+Examples:
+
+```
+Add dependency scanner implementation (req~dependency-scanning~1)
+```
+
+```
+Add unit tests for session timeout (req~session-timeout~1)
+
+Covers edge cases: zero timeout, negative value, exceeding max.
+```
+
+```
+Wire tsffer evidence for dependency scanning (MYPROJECT-DEPENDENCY_SCANNING)
+```
+
+```
+Update .env.oft to include test fixtures directory
+```
+
+**Rules**:
+
+- First line: imperative mood, max ~72 characters, reference the `req~` ID or TSF statement ID in parentheses when applicable
+- Body (optional): explain *why*, not *what* — the diff shows what changed
+- Never commit generated files, build outputs, or secrets
+- Never commit changes to submodule directories (`tsftemplate/`, `tsfagent/`)
+- Run tests before committing — do not commit code that breaks the build
