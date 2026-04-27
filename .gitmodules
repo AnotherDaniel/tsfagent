@@ -1,0 +1,3 @@
+[submodule "tsftemplate"]
+	path = tsftemplate
+	url = https://github.com/AnotherDaniel/tsftemplate
