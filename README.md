@@ -29,7 +29,9 @@ The result is a project where every line of code traces back to a requirement, e
 |-------|---------|
 | **specification-writer** | Decomposes user goals into formal OFT requirements (`req~` items) with BCP14 keywords and tracing directives |
 | **tsf-author** | Creates TSF quality statements aligned with requirements — falsifiable claims with evidence strategies |
-| **developer** | Implements requirements as code and tests, adds OFT coverage markers, wires `tsffer` CI evidence steps || **stpa-analyst** | Performs System-Theoretic Process Analysis on project code/architecture, deriving safety constraints that feed into the other three skills |
+| **developer** | Implements requirements as code and tests, adds OFT coverage markers, wires `tsffer` CI evidence steps |
+| **stpa-analyst** | Performs System-Theoretic Process Analysis on project code/architecture, deriving safety constraints that feed into the other three skills |
+| **quality-reviewer** | Audits overall project quality — TSF graph coverage, OFT tracing gaps, evidence relevance, code practices, CI structure |
 ### Prompts
 
 | Prompt | Purpose |
@@ -76,6 +78,11 @@ User Goal
     └───────────┘
           │
           ▼
+    ┌─────────────────┐
+    │ quality-reviewer │  Audits quality posture (optional)
+    └─────────────────┘
+          │
+          ▼
     Traceable, quality-assured project
 ```
 
@@ -113,6 +120,14 @@ User Goal
    - Ensures `.env.oft` covers all relevant file patterns
 
 7. **The CI pipeline** (from tsftemplate) runs OFT tracing, records evidence via `tsffer`, links it to TSF statements via `tsflink`, and publishes a trust report.
+
+8. **(Optional) quality-reviewer** audits the project's quality posture:
+   - Checks OFT tracing completeness — every `req~` item has the coverage its `Needs:` directive demands
+   - Reviews TSF graph structure — lint, scores, orphaned or unlinked statements
+   - Assesses TSF statement quality — falsifiability, evidence plans, parent-node alignment
+   - Verifies evidence relevance — CI evidence actually proves what the statements claim
+   - Reviews code and test quality for language/framework best practices
+   - Produces a prioritised report with recommendations mapped to the responsible skill
 
 ## Getting Started
 

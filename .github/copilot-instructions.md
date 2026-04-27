@@ -52,14 +52,15 @@
 
 ## Workflow Model
 
-This project uses three specialized skills orchestrated by the **project-manager** agent, with an optional analytical skill:
+This project uses three specialized skills orchestrated by the **project-manager** agent, with optional analytical and review skills:
 
 1. **stpa-analyst** (optional) — performs hazard analysis, deriving safety constraints
 2. **specification-writer** — decomposes goals into `req~` items
 3. **tsf-author** — creates TSF quality statements and evidence plans
 4. **developer** — implements code, tests, OFT markers, and CI evidence
+5. **quality-reviewer** (optional) — audits overall project quality posture across all artifacts
 
-The pipeline flows: (STPA analysis →) specification → TSF statements → implementation → CI evidence → trust report.
+The pipeline flows: (STPA analysis →) specification → TSF statements → implementation → CI evidence → (quality review →) trust report.
 
 ## TSF Tenet Branch Categories
 
